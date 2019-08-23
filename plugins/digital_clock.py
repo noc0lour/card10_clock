@@ -20,7 +20,7 @@ class watch():
             disp = draw_colon(disp, offsetx=(32 + 6) * 2 + 2 + 3)
         self.led1 = toggle_led1(self.led1)
         fill_leds(second // 6)
-        if second % 60:
+        if second % 60 == 0:
             for led in range(10):
                 leds.set(led + 1, (0, 0, 0))
 
