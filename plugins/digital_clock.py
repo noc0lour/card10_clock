@@ -6,23 +6,32 @@
 # line width: 2
 
 import leds
+import buttons
 
 
 class watch():
     def __init__(self):
         self.col = (255, 255, 255)
         self.led1 = False
+        self.blinking = False
 
     def updateClock(self, disp, hour, minute, second):
         disp = draw_number(disp, hour // 10, offsetx=3, offsety=5)
         disp = draw_number(disp, hour % 10, offsetx=(32 + 6) + 3)
         if second % 2:
             disp = draw_colon(disp, offsetx=(32 + 6) * 2 + 2 + 3)
-        self.led1 = toggle_led1(self.led1)
+        if self.blinking:
+            self.led1 = toggle_led1(self.led1)
         fill_leds(second // 6)
         if second % 60 == 0:
             for led in range(10):
                 leds.set(led + 1, (0, 0, 0))
+
+        v = buttons.read(buttons.TOP_RIGHT)
+        if v:
+            if self.blinking:
+                leds.set(0, (0,0,0))
+            self.blinking = not self.blinking
 
         disp = draw_number(disp, minute // 10, offsetx=(32 + 6) * 2 + 8 + 3)
         disp = draw_number(disp, minute % 10, offsetx=(32 + 6) * 3 + 8 + 3)
